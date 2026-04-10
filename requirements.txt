@@ -1,0 +1,8 @@
+# 核心依赖
+pdf2docx>=0.5.6
+
+# 可选：拖拽支持（不安装也可正常使用）
+tkinterdnd2>=0.3.0
+
+# PyInstaller 打包（仅打包时需要）
+# pyinstaller>=5.0
