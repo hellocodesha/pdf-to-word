@@ -1,0 +1,69 @@
+name: 打包 PDF批量转Word工具
+
+on:
+  push:
+    branches: [ main, master ]
+  workflow_dispatch:   # 支持手动触发
+
+jobs:
+  build-windows:
+    name: Windows EXE
+    runs-on: windows-latest
+
+    steps:
+      - name: 检出代码
+        uses: actions/checkout@v4
+
+      - name: 设置 Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: 安装依赖
+        run: |
+          python -m pip install --upgrade pip
+          pip install pdf2docx pyinstaller
+
+      - name: 打包为单文件 EXE
+        run: |
+          pyinstaller --onefile --windowed ^
+            --name "PDF批量转Word工具" ^
+            main.py
+
+      - name: 上传 EXE 产物
+        uses: actions/upload-artifact@v4
+        with:
+          name: PDF批量转Word工具-Windows
+          path: dist/PDF批量转Word工具.exe
+          retention-days: 30
+
+  build-macos:
+    name: macOS App
+    runs-on: macos-latest
+
+    steps:
+      - name: 检出代码
+        uses: actions/checkout@v4
+
+      - name: 设置 Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: 安装依赖
+        run: |
+          python -m pip install --upgrade pip
+          pip install pdf2docx pyinstaller
+
+      - name: 打包为单文件 Mac 可执行文件
+        run: |
+          pyinstaller --onefile --windowed \
+            --name "PDF批量转Word工具" \
+            main.py
+
+      - name: 上传 macOS 产物
+        uses: actions/upload-artifact@v4
+        with:
+          name: PDF批量转Word工具-macOS
+          path: dist/PDF批量转Word工具
+          retention-days: 30
