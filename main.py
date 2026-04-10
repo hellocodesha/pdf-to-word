@@ -310,8 +310,8 @@ class App:
         self._dnd_ok = dnd_ok
         self.root.title("PDF 批量转 Word 工具")
         self.root.configure(bg=BG)
-        self.root.minsize(620, 540)
-        self._center(760, 640)
+        self.root.minsize(640, 600)
+        self._center(760, 700)
 
         self.files: list = []
         self.out_dir  = tk.StringVar()
@@ -387,7 +387,22 @@ class App:
 
     def _build_ui(self):
         wrap = tk.Frame(self.root, bg=BG)
-        wrap.pack(fill="both", expand=True, padx=18, pady=14)
+        # 按钮固定在窗口最底部，不随内容多少移动
+        self.go_btn = tk.Button(
+            self.root, text="开始转换",
+            command=self.start,
+            bg=SUCCESS, fg="white",
+            activebackground="#218838", activeforeground="white",
+            relief="flat", bd=0,
+            font=(FONT, 13, "bold"),
+            pady=14,
+            cursor="hand2",
+        )
+        self.go_btn.pack(side="bottom", fill="x")
+        self._lbl(self.root, "LibreOffice / PyMuPDF / pdf2docx 三引擎",
+                  size=7, fg="#aaa", bg=BG).pack(side="bottom", pady=(4, 0))
+
+        wrap.pack(fill="both", expand=True, padx=18, pady=(14, 4))
 
         # 标题
         bar = tk.Frame(wrap, bg=BG)
@@ -484,21 +499,8 @@ class App:
         self.prog = self._lbl(b3, "0 / 0", size=8, fg="#aaa", bg=CARD)
         self.prog.pack(anchor="e", pady=(3, 0))
 
-        # ── 开始转换按钮（全宽大按钮）────────────────────────────────────────
-        self.go_btn = tk.Button(
-            wrap, text="开始转换",
-            command=self.start,
-            bg=SUCCESS, fg="white",
-            activebackground="#218838", activeforeground="white",
-            relief="flat", bd=0,
-            font=(FONT, 13, "bold"),
-            pady=14,
-            cursor="hand2",
-        )
-        self.go_btn.pack(fill="x")
-
-        self._lbl(wrap, "LibreOffice / PyMuPDF 1.27 / pdf2docx 三引擎",
-                  size=7, fg="#ccc", bg=BG).pack(pady=(6, 0))
+        # 占位弹性空间，让进度卡片不会过度拉伸
+        tk.Frame(wrap, bg=BG).pack(fill="both", expand=True)
 
     # ── 文件管理 ──────────────────────────────────────────────────────────────
 
