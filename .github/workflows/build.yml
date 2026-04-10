@@ -25,10 +25,7 @@ jobs:
           pip install pdf2docx pyinstaller
 
       - name: 打包为单文件 EXE
-        run: |
-          pyinstaller --onefile --windowed ^
-            --name "PDF批量转Word工具" ^
-            main.py
+        run: pyinstaller --onefile --windowed --name "PDF批量转Word工具" main.py
 
       - name: 上传 EXE 产物
         uses: actions/upload-artifact@v4
